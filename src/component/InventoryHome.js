@@ -33,7 +33,7 @@ function InventoryHome(props) {
 							<Card.Text>
 								Add new suppliers to the system.
     							</Card.Text>
-							<Button variant="primary">Add Suppliers</Button>
+							<Button variant="primary" onClick={() => {props.setPreviousContentForSupplierAdd('inventory-home'); props.onContentChange('supplier-add');}}>Add Suppliers</Button>
 						</Card.Body>
 					</Card>
 				</Col>

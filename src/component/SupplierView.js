@@ -53,7 +53,7 @@ const SupplierView = (props) => {
 								<th>EMAIL</th>
 								<th>CONTACT</th>
 								<th>
-									<Button className='btn-success btn-sm'>
+									<Button className='btn-success btn-sm' onClick={() => { props.setPreviousContentForSupplierAdd('supplier-view'); props.onContentChange('supplier-add'); }}>
 										<PlusCircleFill />
 									</Button>
 								</th>

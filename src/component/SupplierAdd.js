@@ -3,41 +3,19 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { updateSupplier } from '../service/InventoryService';
+import { addSupplier } from '../service/InventoryService';
 
-const SupplierEdit = (props) => {
-	const [code, setCode] = useState(props.supplier.code);
+const SupplierAdd = (props) => {
+	const [code, setCode] = useState('');
 	const [codeValidation, setCodeValidation] = useState(true);
-	const [name, setName] = useState(props.supplier.name);
+	const [name, setName] = useState('');
 	const [nameValidation, setNameValidation] = useState(true);
-	const [email, setEmail] = useState(props.supplier.email);
+	const [email, setEmail] = useState('');
 	const [emailValidation, setEmailValidation] = useState(true);
-	const [contact, setContact] = useState(props.supplier.contact);
+	const [contact, setContact] = useState('');
 	const [contactValidation, setContactValidation] = useState(true);
 	const [formValidation, setFormValidation] = useState(false);
 
-	const handleUpdate = (event) => {
-		event.preventDefault();
-		if (window.confirm("Do you want to update the supplier info?")) {
-			if (codeValidation && nameValidation && emailValidation && contactValidation) {
-				const data = {
-					code: code,
-					name: name,
-					email: email,
-					contact: contact
-				};
-				updateSupplier(props.supplier.id, data).then(res => {
-					window.alert("The supplier has been updated.");
-					setFormValidation(false);
-					props.onUpdate();
-				});
-			}
-			else {
-				window.alert("Update failed! Some fileds contain erroneous data. Please review before update.")
-			}
-		}
-
-	};
 
 	const validateCode = () => {
 		if (code === '' || code.length > 20) {
@@ -91,12 +69,33 @@ const SupplierEdit = (props) => {
 		}
 	};
 
+	const handleAdd = event => {
+		event.preventDefault();
+		if (window.confirm("Do you want to register this new supplier?")) {
+			if (codeValidation && nameValidation && emailValidation && contactValidation) {
+				const data = {
+					code: code,
+					name: name,
+					email: email,
+					contact: contact
+				};
+				addSupplier(data).then(res => {
+					window.alert("The supplier has been registered.");
+					setFormValidation(false);
+					props.onUpdate();
+				});
+			}
+			else {
+				window.alert("Registration failed! Some fileds contain erroneous data. Please review before update.")
+			}
+		}
+	};
+
 	return (
-		console.log(codeValidation),
-		< React.Fragment >
+		<React.Fragment>
 			<Row className="justify-content-center">
 				<Col className="text-center">
-					<h1 className="display-4">SUPPLIER INFORMATION UPDATE</h1>
+					<h1 className="display-4">NEW SUPPLIER REGISTRATION</h1>
 					<br />
 				</Col>
 			</Row>
@@ -147,17 +146,17 @@ const SupplierEdit = (props) => {
 				</Form.Row>
 				<Form.Row className="justify-content-center">
 					<Col xs={6}>
-						<Button variant="primary" onClick={() => { props.onContentChange("supplier-view"); }} style={{ marginRight: "2rem" }}>
+						<Button variant="primary" onClick={() => { props.onContentChange(props.previousContent); }} style={{ marginRight: "2rem" }}>
 							Back
 						</Button>
-						<Button variant="primary" type="submit" onClick={event => handleUpdate(event)}>
-							Update
+						<Button variant="primary" type="submit" onClick={handleAdd}>
+							Add
 						</Button>
 					</Col>
 				</Form.Row>
 			</Form>
-		</React.Fragment >
+		</React.Fragment>
 	);
 }
 
-export default SupplierEdit;
+export default SupplierAdd;

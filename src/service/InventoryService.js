@@ -6,6 +6,10 @@ const getSuppliers = () => {
 	return axios.get(`${BASE_URL}/supplier`);
 };
 
+const addSupplier = (data) => {
+	return axios.post(`${BASE_URL}/supplier`, data);
+}
+
 const updateSupplier = (id, data) => {
 	return axios.patch(`${BASE_URL}/supplier/${id}`, data);
 }
@@ -20,4 +24,4 @@ const getProducts = () => {
 
 
 
-export { getSuppliers, getProducts, updateSupplier, deleteSupplier };
+export { getSuppliers, getProducts, updateSupplier, deleteSupplier, addSupplier };
