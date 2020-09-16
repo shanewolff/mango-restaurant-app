@@ -35,7 +35,7 @@ const SupplierView = (props) => {
 			</td>
 		</tr>
 	);
-	
+
 	return (
 		<React.Fragment>
 			<Row>
@@ -46,7 +46,7 @@ const SupplierView = (props) => {
 			</Row>
 			<Row>
 				<Col>
-					<Table striped hover>
+					<Table striped hover className="shadow p-3 mb-5 bg-white rounded">
 						<thead className="thead-dark">
 							<tr>
 								<th>CODE</th>
