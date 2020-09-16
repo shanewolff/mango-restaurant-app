@@ -47,7 +47,7 @@ function InventoryHome(props) {
 							<Card.Text>
 								View all products, update them as required.
     							</Card.Text>
-							<Button variant="primary">View Products</Button>
+							<Button variant="primary" onClick={() => { props.onContentChange("product-view"); }}>View Products</Button>
 						</Card.Body>
 					</Card>
 				</Col>

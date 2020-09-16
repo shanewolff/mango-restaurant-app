@@ -4,43 +4,41 @@ import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import { PencilFill, TrashFill, PlusCircleFill } from 'react-bootstrap-icons';
-import { deleteSupplier } from '../service/InventoryService';
+import { deleteProduct } from '../service/InventoryService';
 
-const SupplierView = (props) => {
+const ProductView = (props) => {
 
 	const handleDelete = id => {
-		if (window.confirm("Do you want to delete the selected supplier?")) {
-			deleteSupplier(id).then(res => {
-				window.alert("The selected supplier has been deleted");
-				props.onDelete();
-			});
-		}
-	}
 
-	const tableRows = props.suppliers.map(supplier =>
-		<tr key={supplier.id}>
-			<td>{supplier.code}</td>
-			<td>{supplier.name}</td>
-			<td>{supplier.email}</td>
-			<td>{supplier.contact}</td>
+	};
+
+	const tableRows = props.products.map(product =>
+		<tr key={product.id}>
+			<td>{product.code}</td>
+			<td>{product.name}</td>
+			<td>{product.category}</td>
+			<td>{product.description}</td>
+			<td>{product.supplierName}</td>
+			<td>{product.quantity}</td>
+			<td>{product.stockLevel}</td>
 			<td>
 				<div className='btn-group-sm'>
-					<Button className='btn-warning' onClick={() => { props.onEditClick(supplier.id) }}>
+					<Button className='btn-warning' onClick={() => { props.onEditClick(product.id) }}>
 						<PencilFill />
 					</Button>
-					<Button className='btn-danger' onClick={() => handleDelete(supplier.id)}>
+					<Button className='btn-danger' onClick={() => handleDelete(product.id)}>
 						<TrashFill />
 					</Button>
 				</div>
 			</td>
 		</tr>
 	);
-	
+
 	return (
 		<React.Fragment>
 			<Row>
 				<Col className="text-center">
-					<h1 className="display-4">SUPPLIER INFORMATION</h1>
+					<h1 className="display-4">PRODUCT INVENTORY</h1>
 					<br />
 				</Col>
 			</Row>
@@ -51,10 +49,13 @@ const SupplierView = (props) => {
 							<tr>
 								<th>CODE</th>
 								<th>NAME</th>
-								<th>EMAIL</th>
-								<th>CONTACT</th>
+								<th>CATEGORY</th>
+								<th>DESCRIPTION</th>
+								<th>SUPPLIER</th>
+								<th>QUANTITY</th>
+								<th>STOCK LEVEL</th>
 								<th>
-									<Button className='btn-success btn-sm' onClick={() => { props.setPreviousContentForSupplierAdd('supplier-view'); props.onContentChange('supplier-add'); }}>
+									<Button className='btn-success btn-sm' onClick={() => { props.setPreviousContentForProductAdd('product-view'); props.onContentChange('product-add'); }}>
 										<PlusCircleFill />
 									</Button>
 								</th>
@@ -77,4 +78,4 @@ const SupplierView = (props) => {
 	);
 }
 
-export default SupplierView;
+export default ProductView;
