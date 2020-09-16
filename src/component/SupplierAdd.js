@@ -99,62 +99,66 @@ const SupplierAdd = (props) => {
 					<br />
 				</Col>
 			</Row>
-			<Form>
-				<Form.Row className="justify-content-center">
-					<Col xs={6}>
-						<Form.Group>
-							<Form.Label>Code</Form.Label>
-							<Form.Control type="text" value={code} onChange={event => setCode(event.target.value)} onBlur={validateCode} className={getFieldValidationClass(codeValidation)} />
-							<Form.Text className="text-muted">
-								Code is required and should not be longer than 20 characters.
+			<Row className="justify-content-center">
+				<Col xs={6}>
+					<Form className="shadow p-3 mb-5 bg-white rounded">
+						<Form.Row>
+							<Col>
+								<Form.Group>
+									<Form.Label>Code</Form.Label>
+									<Form.Control type="text" value={code} onChange={event => setCode(event.target.value)} onBlur={validateCode} className={getFieldValidationClass(codeValidation)} />
+									<Form.Text className="text-muted">
+										Code is required and should not be longer than 20 characters.
 							</Form.Text>
-						</Form.Group>
-					</Col>
-				</Form.Row>
-				<Form.Row className="justify-content-center">
-					<Col xs={6}>
-						<Form.Group>
-							<Form.Label>Name</Form.Label>
-							<Form.Control type="text" value={name} onChange={event => setName(event.target.value)} onBlur={validateName} className={getFieldValidationClass(nameValidation)} />
-							<Form.Text className="text-muted">
-								Name is required and should not be longer than 45 characters.
+								</Form.Group>
+							</Col>
+						</Form.Row>
+						<Form.Row>
+							<Col>
+								<Form.Group>
+									<Form.Label>Name</Form.Label>
+									<Form.Control type="text" value={name} onChange={event => setName(event.target.value)} onBlur={validateName} className={getFieldValidationClass(nameValidation)} />
+									<Form.Text className="text-muted">
+										Name is required and should not be longer than 45 characters.
 							</Form.Text>
-						</Form.Group>
-					</Col>
-				</Form.Row>
-				<Form.Row className="justify-content-center">
-					<Col xs={6}>
-						<Form.Group>
-							<Form.Label>Email Address</Form.Label>
-							<Form.Control type="email" value={email} onChange={event => setEmail(event.target.value)} onBlur={validateEmail} className={getFieldValidationClass(emailValidation)} />
-							<Form.Text className="text-muted">
-								Email is optional. Address length should be limited to 45 characters.
+								</Form.Group>
+							</Col>
+						</Form.Row>
+						<Form.Row>
+							<Col>
+								<Form.Group>
+									<Form.Label>Email Address</Form.Label>
+									<Form.Control type="email" value={email} onChange={event => setEmail(event.target.value)} onBlur={validateEmail} className={getFieldValidationClass(emailValidation)} />
+									<Form.Text className="text-muted">
+										Email is optional. Address length should be limited to 45 characters.
 							</Form.Text>
-						</Form.Group>
-					</Col>
-				</Form.Row>
-				<Form.Row className="justify-content-center">
-					<Col xs={6}>
-						<Form.Group>
-							<Form.Label>Contact Number</Form.Label>
-							<Form.Control type="text" value={contact} onChange={event => setContact(event.target.value)} onBlur={validateContact} className={getFieldValidationClass(contactValidation)} />
-							<Form.Text className="text-muted">
-								Contact number is required and should include only 10 digits. (E.g. 0112345678)
+								</Form.Group>
+							</Col>
+						</Form.Row>
+						<Form.Row>
+							<Col>
+								<Form.Group>
+									<Form.Label>Contact Number</Form.Label>
+									<Form.Control type="text" value={contact} onChange={event => setContact(event.target.value)} onBlur={validateContact} className={getFieldValidationClass(contactValidation)} />
+									<Form.Text className="text-muted">
+										Contact number is required and should include only 10 digits. (E.g. 0112345678)
 							</Form.Text>
-						</Form.Group>
-					</Col>
-				</Form.Row>
-				<Form.Row className="justify-content-center">
-					<Col xs={6}>
-						<Button variant="primary" onClick={() => { props.onContentChange(props.previousContent); }} style={{ marginRight: "2rem" }}>
-							Back
+								</Form.Group>
+							</Col>
+						</Form.Row>
+						<Form.Row>
+							<Col>
+								<Button variant="primary" onClick={() => { props.onContentChange(props.previousContent); }} style={{ marginRight: "2rem" }}>
+									Back
 						</Button>
-						<Button variant="primary" type="submit" onClick={handleAdd}>
-							Add
+								<Button variant="primary" type="submit" onClick={handleAdd}>
+									Add
 						</Button>
-					</Col>
-				</Form.Row>
-			</Form>
+							</Col>
+						</Form.Row>
+					</Form>
+				</Col>
+			</Row>
 		</React.Fragment>
 	);
 }
