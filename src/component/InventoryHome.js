@@ -33,7 +33,7 @@ function InventoryHome(props) {
 							<Card.Text>
 								Add new suppliers to the system.
     							</Card.Text>
-							<Button variant="primary" onClick={() => {props.setPreviousContentForSupplierAdd('inventory-home'); props.onContentChange('supplier-add');}}>Add Suppliers</Button>
+							<Button variant="primary" onClick={() => { props.setPreviousContentForSupplierAdd('inventory-home'); props.onContentChange('supplier-add'); }}>Add Suppliers</Button>
 						</Card.Body>
 					</Card>
 				</Col>
@@ -59,7 +59,7 @@ function InventoryHome(props) {
 							<Card.Text>
 								Add new products to the system.
     							</Card.Text>
-							<Button variant="primary">Add Products</Button>
+							<Button variant="primary" onClick={() => { props.setPreviousContentForProductAdd('inventory-home'); props.onContentChange('product-add'); }}>Add Products</Button>
 						</Card.Body>
 					</Card>
 				</Col>

@@ -3,22 +3,22 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { updateProduct } from '../service/InventoryService';
+import { addProduct } from '../service/InventoryService';
 
-const ProductEdit = (props) => {
-	const [code, setCode] = useState(props.product.code);
+const ProductAdd = (props) => {
+	const [code, setCode] = useState('');
 	const [codeValidation, setCodeValidation] = useState(null);
-	const [name, setName] = useState(props.product.name);
+	const [name, setName] = useState('');
 	const [nameValidation, setNameValidation] = useState(null);
-	const [category, setCategory] = useState(props.product.category);
+	const [category, setCategory] = useState('');
 	const [categoryValidation, setCategoryValidation] = useState(null);
-	const [description, setDescription] = useState(props.product.description);
+	const [description, setDescription] = useState('');
 	const [descriptionValidation, setDescriptionValidation] = useState(null);
-	const [supplier, setSupplier] = useState(props.product.supplierName);
-	const [supplierId, setSupplierId] = useState(props.product.supplierId);
-	const [quantity, setQuantity] = useState(props.product.quantity);
+	const [supplier, setSupplier] = useState(props.suppliers[0].name);
+	const [supplierId, setSupplierId] = useState(props.suppliers[0].id);
+	const [quantity, setQuantity] = useState('');
 	const [quantityValidation, setQuantityValidation] = useState(null);
-	const [stockLevel, setStockLevel] = useState(props.product.stockLevel);
+	const [stockLevel, setStockLevel] = useState(0);
 	const [stockLevelValidation, setStockLevelValidation] = useState(null);
 
 
@@ -37,10 +37,26 @@ const ProductEdit = (props) => {
 		setStockLevelValidation(null);
 	};
 
-	const handleUpdate = (event) => {
+	const resetFields = () => {
+		setCode('');
+		setName('');
+		setCategory('');
+		setDescription('');
+		setQuantity('');
+		setStockLevel(0);
+	};
+
+	const handleAdd = event => {
 		event.preventDefault();
-		if (window.confirm("Do you want to update the product info?")) {
-			if (codeValidation !== false && nameValidation !== false && categoryValidation !== false && descriptionValidation !== false && quantityValidation !== false && stockLevelValidation !== false) {
+		if (window.confirm("Do you want to add this new product?")) {
+			validateCode();
+			validateName();
+			validateCategory();
+			validateDescription();
+			validateQuantity();
+			validateStockLevel();
+
+			if (codeValidation && nameValidation && categoryValidation && descriptionValidation && quantityValidation && stockLevelValidation) {
 				const data = {
 					code: code,
 					name: name,
@@ -48,19 +64,19 @@ const ProductEdit = (props) => {
 					description: description,
 					quantity: quantity,
 					stockLevel: stockLevel,
-					supplierId: supplierId
+					supplierId: Number(supplierId)
 				};
-				updateProduct(props.product.id, data).then(res => {
-					window.alert("The product has been updated.");
+				addProduct(data).then(res => {
+					window.alert("The product has been added.");
+					resetFields();
 					setAllValidationsNull();
-					props.onUpdate();
+					props.onAdd();
 				});
 			}
 			else {
-				window.alert("Update failed! Some fileds contain erroneous data. Please review before update.")
+				window.alert("Submission failed! Some fileds contain erroneous data. Please review before update.")
 			}
 		}
-
 	};
 
 	const validateCode = () => {
@@ -122,7 +138,7 @@ const ProductEdit = (props) => {
 		else if (isNaN(stockLevel)) {
 			setStockLevelValidation(false);
 		}
-		else if ((Number(stockLevel) <= 0) || ((props.totalStockLevel - props.product.stockLevel + Number(stockLevel)) > 100)) {
+		else if ((Number(stockLevel) <= 0) || ((props.totalStockLevel + Number(stockLevel)) > 100)) {
 			setStockLevelValidation(false);
 		}
 		else {
@@ -190,7 +206,7 @@ const ProductEdit = (props) => {
 		< React.Fragment >
 			<Row className="justify-content-center">
 				<Col className="text-center">
-					<h1 className="display-4">PRODUCT INFORMATION UPDATE</h1>
+					<h1 className="display-4">NEW PRODUCT SUBMISSION</h1>
 					<br />
 				</Col>
 			</Row>
@@ -269,7 +285,7 @@ const ProductEdit = (props) => {
 							<Col>
 								<Form.Group>
 									<Form.Label>Stock Level</Form.Label>
-									<Form.Control type="number" min={0} max={100 - (props.totalStockLevel - props.product.stockLevel)} step='any' value={stockLevel} onChange={event => setStockLevel(event.target.value)} onBlur={validateStockLevel} className={getFieldValidationClass('stockLevel')} />
+									<Form.Control type="number" min={0} max={100 - (props.totalStockLevel)} step='any' value={stockLevel} onChange={event => setStockLevel(event.target.value)} onBlur={validateStockLevel} className={getFieldValidationClass('stockLevel')} />
 									<Form.Text className="text-muted">
 										Stock level is a required value between 0-100 and should not exceed the total stock level percentage of 100.
 							</Form.Text>
@@ -278,11 +294,11 @@ const ProductEdit = (props) => {
 						</Form.Row>
 						<Form.Row>
 							<Col>
-								<Button variant="primary" onClick={() => { props.onContentChange("product-view"); }} style={{ marginRight: "2rem" }}>
+								<Button variant="primary" onClick={() => { props.onContentChange(props.previousContent); }} style={{ marginRight: "2rem" }}>
 									Back
 								</Button>
-								<Button variant="primary" type="submit" onClick={handleUpdate}>
-									Update
+								<Button variant="primary" type="submit" onClick={handleAdd}>
+									Add
 								</Button>
 							</Col>
 						</Form.Row>
@@ -293,4 +309,4 @@ const ProductEdit = (props) => {
 	);
 }
 
-export default ProductEdit;
+export default ProductAdd;

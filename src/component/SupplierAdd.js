@@ -7,45 +7,51 @@ import { addSupplier } from '../service/InventoryService';
 
 const SupplierAdd = (props) => {
 	const [code, setCode] = useState('');
-	const [codeValidation, setCodeValidation] = useState(true);
+	const [codeValidation, setCodeValidation] = useState(null);
 	const [name, setName] = useState('');
-	const [nameValidation, setNameValidation] = useState(true);
+	const [nameValidation, setNameValidation] = useState(null);
 	const [email, setEmail] = useState('');
-	const [emailValidation, setEmailValidation] = useState(true);
+	const [emailValidation, setEmailValidation] = useState(null);
 	const [contact, setContact] = useState('');
-	const [contactValidation, setContactValidation] = useState(true);
-	const [formValidation, setFormValidation] = useState(false);
+	const [contactValidation, setContactValidation] = useState(null);
 
+	const setAllValidationsNull = () => {
+		setCodeValidation(null);
+		setNameValidation(null);
+		setEmailValidation(null);
+		setContactValidation(null);
+	};
+
+	const resetFields = () => {
+		setCode('');
+		setName('');
+		setEmail('');
+		setContact('');
+	};
 
 	const validateCode = () => {
 		if (code === '' || code.length > 20) {
 			setCodeValidation(false);
-			setFormValidation(true);
 		} else {
 			setCodeValidation(true);
-			setFormValidation(true);
 		}
 	};
 
 	const validateName = () => {
 		if (name === '' || name.length > 45) {
 			setNameValidation(false);
-			setFormValidation(true);
 		} else {
 			setNameValidation(true);
-			setFormValidation(true);
 		}
 	};
 
 	const validateEmail = () => {
-		const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 		if (email && (code.length > 20 || !EMAIL_REGEX.test(email))) {
 			setEmailValidation(false);
-			setFormValidation(true);
 		} else {
 			setEmailValidation(true);
-			setFormValidation(true);
 		}
 	};
 
@@ -53,25 +59,54 @@ const SupplierAdd = (props) => {
 		const CONTACT_REGEX = /^\d{10}$/;
 		if (contact === '' || !CONTACT_REGEX.test(contact)) {
 			setContactValidation(false);
-			setFormValidation(true);
 		} else {
 			setContactValidation(true);
-			setFormValidation(true);
 		}
 	};
 
-	const getFieldValidationClass = flag => {
-		if (formValidation) {
-			return flag ? 'is-valid' : 'is-invalid';
-		}
-		else {
-			return '';
+	const getFieldValidationClass = (field) => {
+		switch (field) {
+			case 'code':
+				if (codeValidation === null) {
+					return '';
+				}
+				else {
+					return codeValidation ? 'is-valid' : 'is-invalid';
+				}
+			case 'name':
+				if (nameValidation === null) {
+					return '';
+				}
+				else {
+					return nameValidation ? 'is-valid' : 'is-invalid';
+				}
+			case 'email':
+				if (emailValidation === null) {
+					return '';
+				}
+				else {
+					return emailValidation ? 'is-valid' : 'is-invalid';
+				}
+			case 'contact':
+				if (contactValidation === null) {
+					return '';
+				}
+				else {
+					return contactValidation ? 'is-valid' : 'is-invalid';
+				}
+			default:
+				break;
 		}
 	};
 
 	const handleAdd = event => {
 		event.preventDefault();
 		if (window.confirm("Do you want to register this new supplier?")) {
+			validateCode();
+			validateName();
+			validateEmail();
+			validateContact();
+
 			if (codeValidation && nameValidation && emailValidation && contactValidation) {
 				const data = {
 					code: code,
@@ -81,8 +116,9 @@ const SupplierAdd = (props) => {
 				};
 				addSupplier(data).then(res => {
 					window.alert("The supplier has been registered.");
-					setFormValidation(false);
-					props.onUpdate();
+					resetFields();
+					setAllValidationsNull();
+					props.onAdd();
 				});
 			}
 			else {
@@ -106,7 +142,7 @@ const SupplierAdd = (props) => {
 							<Col>
 								<Form.Group>
 									<Form.Label>Code</Form.Label>
-									<Form.Control type="text" value={code} onChange={event => setCode(event.target.value)} onBlur={validateCode} className={getFieldValidationClass(codeValidation)} />
+									<Form.Control type="text" value={code} onChange={event => setCode(event.target.value)} onBlur={validateCode} className={getFieldValidationClass('code')} />
 									<Form.Text className="text-muted">
 										Code is required and should not be longer than 20 characters.
 							</Form.Text>
@@ -117,7 +153,7 @@ const SupplierAdd = (props) => {
 							<Col>
 								<Form.Group>
 									<Form.Label>Name</Form.Label>
-									<Form.Control type="text" value={name} onChange={event => setName(event.target.value)} onBlur={validateName} className={getFieldValidationClass(nameValidation)} />
+									<Form.Control type="text" value={name} onChange={event => setName(event.target.value)} onBlur={validateName} className={getFieldValidationClass('name')} />
 									<Form.Text className="text-muted">
 										Name is required and should not be longer than 45 characters.
 							</Form.Text>
@@ -128,7 +164,7 @@ const SupplierAdd = (props) => {
 							<Col>
 								<Form.Group>
 									<Form.Label>Email Address</Form.Label>
-									<Form.Control type="email" value={email} onChange={event => setEmail(event.target.value)} onBlur={validateEmail} className={getFieldValidationClass(emailValidation)} />
+									<Form.Control type="email" value={email} onChange={event => setEmail(event.target.value)} onBlur={validateEmail} className={getFieldValidationClass('email')} />
 									<Form.Text className="text-muted">
 										Email is optional. Address length should be limited to 45 characters.
 							</Form.Text>
@@ -139,7 +175,7 @@ const SupplierAdd = (props) => {
 							<Col>
 								<Form.Group>
 									<Form.Label>Contact Number</Form.Label>
-									<Form.Control type="text" value={contact} onChange={event => setContact(event.target.value)} onBlur={validateContact} className={getFieldValidationClass(contactValidation)} />
+									<Form.Control type="text" value={contact} onChange={event => setContact(event.target.value)} onBlur={validateContact} className={getFieldValidationClass('contact')} />
 									<Form.Text className="text-muted">
 										Contact number is required and should include only 10 digits. (E.g. 0112345678)
 							</Form.Text>
@@ -150,10 +186,10 @@ const SupplierAdd = (props) => {
 							<Col>
 								<Button variant="primary" onClick={() => { props.onContentChange(props.previousContent); }} style={{ marginRight: "2rem" }}>
 									Back
-						</Button>
+								</Button>
 								<Button variant="primary" type="submit" onClick={handleAdd}>
 									Add
-						</Button>
+								</Button>
 							</Col>
 						</Form.Row>
 					</Form>

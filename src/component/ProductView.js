@@ -1,16 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import { PencilFill, TrashFill, PlusCircleFill } from 'react-bootstrap-icons';
 import { deleteProduct } from '../service/InventoryService';
+import './ProductView.css';
 
 const ProductView = (props) => {
 
 	const handleDelete = id => {
-
-	};
+		if (window.confirm("Do you want to delete the selected producted?")) {
+			deleteProduct(id).then(res => {
+				window.alert("The selected product has been deleted");
+				props.onDelete();
+			});
+		}
+	}
 
 	const tableRows = props.products.map(product =>
 		<tr key={product.id}>
