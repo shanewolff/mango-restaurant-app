@@ -22,6 +22,20 @@ const getProducts = () => {
 	return axios.get(`${BASE_URL}/product`);
 };
 
+const updateProduct = (id, data) => {
+	return axios.patch(`${BASE_URL}/product/${id}`, data);
+}
 
+const getTotalStockLevel = () => {
+	return axios.get(`${BASE_URL}/stock-level`);
+}
 
-export { getSuppliers, getProducts, updateSupplier, deleteSupplier, addSupplier };
+export {
+	getSuppliers,
+	getProducts,
+	updateSupplier,
+	deleteSupplier,
+	addSupplier,
+	getTotalStockLevel,
+	updateProduct
+};

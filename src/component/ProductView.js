@@ -8,12 +8,6 @@ import { deleteProduct } from '../service/InventoryService';
 
 const ProductView = (props) => {
 
-	const [totalStockLevel, setTotalStockLevel] = useState(0);
-
-	useEffect(function updateTotalStockLevel() {
-		setTotalStockLevel(props.products.reduce((total, current) => total + current.stockLevel, 0));
-	}, [props.products]);
-
 	const handleDelete = id => {
 
 	};
@@ -42,13 +36,16 @@ const ProductView = (props) => {
 
 	const getProgressBarClasses = () => {
 		const progressBarClasses = ['progress-bar', 'progress-bar-striped', 'progress-bar-animated'];
-		if (totalStockLevel <= 25) {
+		if (props.totalStockLevel <= 25) {
 			progressBarClasses.push('bg-success');
-		} else if (totalStockLevel <= 50) {
+		}
+		else if (props.totalStockLevel <= 50) {
 			progressBarClasses.push('bg-info');
-		} else if (totalStockLevel <= 75) {
+		}
+		else if (props.totalStockLevel <= 75) {
 			progressBarClasses.push('bg-warning');
-		} else if (totalStockLevel > 75) {
+		}
+		else if (props.totalStockLevel > 75) {
 			progressBarClasses.push('bg-warning');
 		}
 
@@ -66,7 +63,7 @@ const ProductView = (props) => {
 			<Row>
 				<Col>
 					<div className="progress" style={{ height: '2.5rem' }}>
-						<div className={getProgressBarClasses()} role="progressbar" aria-valuenow={totalStockLevel} aria-valuemin="0" aria-valuemax="100" style={{ width: `${totalStockLevel}%` }}><strong style={{fontSize: '1rem'}}>CURRENT STOCK LEVEL: {totalStockLevel}%</strong></div>
+						<div className={getProgressBarClasses()} role="progressbar" aria-valuenow={props.totalStockLevel} aria-valuemin="0" aria-valuemax="100" style={{ width: `${props.totalStockLevel}%` }}><div className='progress-bar-text' style={{ fontSize: '1rem' }}>CURRENT STOCK LEVEL: {props.totalStockLevel}%</div></div>
 					</div>
 				</Col>
 			</Row>

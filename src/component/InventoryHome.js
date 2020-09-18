@@ -41,7 +41,7 @@ function InventoryHome(props) {
 			<Row>
 				<Col>
 					<Card style={{ width: '30rem' }} className="shadow p-3 mb-5 bg-white rounded">
-						<Card.Img variant="top" src="product.png" />
+						<Card.Img variant="top" src="product.jpg" />
 						<Card.Body>
 							<Card.Title>PRODUCT MANAGEMENT</Card.Title>
 							<Card.Text>
@@ -53,7 +53,7 @@ function InventoryHome(props) {
 				</Col>
 				<Col>
 					<Card style={{ width: '30rem' }} className="shadow p-3 mb-5 bg-white rounded">
-						<Card.Img variant="top" src="product.png" />
+						<Card.Img variant="top" src="product.jpg" />
 						<Card.Body>
 							<Card.Title>PRODUCT MANAGEMENT</Card.Title>
 							<Card.Text>

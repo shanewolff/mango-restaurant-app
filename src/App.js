@@ -5,7 +5,8 @@ import SupplierView from './component/SupplierView';
 import SupplierEdit from './component/SupplierEdit';
 import SupplierAdd from './component/SupplierAdd';
 import ProductView from './component/ProductView';
-import { getSuppliers, getProducts } from './service/InventoryService';
+import ProductEdit from './component/ProductEdit';
+import { getSuppliers, getProducts, getTotalStockLevel } from './service/InventoryService';
 
 const App = (props) => {
 	const [content, setContent] = useState('inventory-home');
@@ -16,6 +17,7 @@ const App = (props) => {
 	const [editingSupplier, setEditingSupplier] = useState(null);
 	const [editingProduct, setEditingProduct] = useState(null);
 	const [previousContentSupplierAdd, setPreviousContentSupplierAdd] = useState('inventory-home');
+	const [totalStockLevel, setTotalStockLevel] = useState(0);
 
 	useEffect(() => {
 		getSuppliers().then(res => {
@@ -27,7 +29,13 @@ const App = (props) => {
 	useEffect(() => {
 		getProducts().then(res => {
 			setProducts(res.data);
-			setProductsChanged(true);
+			setProductsChanged(false);
+		});
+	}, [productsChanged]);
+
+	useEffect(() => {
+		getTotalStockLevel().then(res => {
+			setTotalStockLevel(res.data.value);
 		});
 	}, [productsChanged]);
 
@@ -51,6 +59,10 @@ const App = (props) => {
 		setSuppliersChanged(true);
 	};
 
+	const handleProductEdited = () => {
+		setProductsChanged(true);
+	};
+
 	const setPreviousContentForSupplierAdd = (content) => {
 		setPreviousContentSupplierAdd(content);
 	};
@@ -61,7 +73,8 @@ const App = (props) => {
 			{content === 'supplier-view' && (<SupplierView onContentChange={handleContentChange} suppliers={suppliers} onEditClick={handleSupplierEditing} onDelete={handleSupplierEdited} setPreviousContentForSupplierAdd={setPreviousContentForSupplierAdd} />)}
 			{content === 'supplier-edit' && (<SupplierEdit supplier={editingSupplier} onContentChange={handleContentChange} onUpdate={handleSupplierEdited} />)}
 			{content === 'supplier-add' && (<SupplierAdd previousContent={previousContentSupplierAdd} onContentChange={handleContentChange} onUpdate={handleSupplierEdited} />)}
-			{content === 'product-view' && (<ProductView onContentChange={handleContentChange} products={products} onEditClick={handleProductEditing} />)}
+			{content === 'product-view' && (<ProductView onContentChange={handleContentChange} products={products} onEditClick={handleProductEditing} totalStockLevel={totalStockLevel} />)}
+			{content === 'product-edit' && (<ProductEdit product={editingProduct} onContentChange={handleContentChange} onUpdate={handleProductEdited} suppliers={suppliers} totalStockLevel={totalStockLevel} />)}
 		</Container>);
 }
 
