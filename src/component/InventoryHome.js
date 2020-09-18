@@ -5,6 +5,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
 function InventoryHome(props) {
+
     return (
         <React.Fragment>
             <Row>
@@ -22,7 +23,7 @@ function InventoryHome(props) {
                                 View all suppliers, update them as required.
                             </Card.Text>
                             <Button variant="primary" onClick={() => {
-                                props.onContentChange("supplier-view");
+                                props.onContentChange("supplier-view")
                             }}>View Suppliers</Button>
                         </Card.Body>
                     </Card>

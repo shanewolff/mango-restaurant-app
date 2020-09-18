@@ -4,20 +4,29 @@ import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import {PencilFill, PlusCircleFill, TrashFill} from 'react-bootstrap-icons';
-import {deleteProduct} from '../service/InventoryService';
 import './ProductView.css';
+import API from '../api';
 
 const ProductView = (props) => {
 
     const handleDelete = id => {
-        if (window.confirm("Do you want to delete the selected producted?")) {
-            deleteProduct(id).then(res => {
-                window.alert("The selected product has been deleted");
-                props.onDelete();
-            });
+        if (window.confirm("Do you want to delete the selected product?")) {
+            API.delete(`/product/${id}`)
+                .then(res => {
+                    window.alert("The selected product has been deleted");
+                    props.onDelete();
+                })
+                .catch(err => {
+                    if (err.response) {
+                        console.log('Internal Server Error');
+                        alert('Product could not be deleted due to an internal server error!')
+                    } else if (err.request) {
+                        console.log('Network error or server is not responding');
+                        alert('Cannot delete the product data due to a network error or the service is unavailable!')
+                    }
+                });
         }
     }
-
     const tableRows = props.products.map(product =>
         <tr key={product.id}>
             <td>{product.code}</td>
@@ -51,7 +60,7 @@ const ProductView = (props) => {
         } else if (props.totalStockLevel <= 75) {
             progressBarClasses.push('bg-warning');
         } else if (props.totalStockLevel > 75) {
-            progressBarClasses.push('bg-warning');
+            progressBarClasses.push('bg-danger');
         }
 
         return progressBarClasses.join(' ');
@@ -119,5 +128,6 @@ const ProductView = (props) => {
         </React.Fragment>
     );
 }
+
 
 export default ProductView;

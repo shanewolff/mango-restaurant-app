@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import {updateProduct} from '../service/InventoryService';
+import API from '../api';
 
 const ProductEdit = (props) => {
     const [code, setCode] = useState(props.product.code);
@@ -49,14 +49,24 @@ const ProductEdit = (props) => {
                     quantity: quantity,
                     stockLevel: stockLevel,
                     supplierId: supplierId
-                };
-                updateProduct(props.product.id, data).then(res => {
-                    window.alert("The product has been updated.");
-                    setAllValidationsNull();
-                    props.onUpdate();
-                });
+                }
+                API.patch(`/product/${props.product.id}`, data)
+                    .then(res => {
+                        window.alert("The product has been updated.");
+                        setAllValidationsNull();
+                        props.onUpdate();
+                    })
+                    .catch(err => {
+                        if (err.response) {
+                            console.log('Internal Server Error');
+                            alert('Product could not be updated due to an internal server error!')
+                        } else if (err.request) {
+                            console.log('Network error or server is not responding');
+                            alert('Cannot update the product data due to a network error or the service is unavailable!')
+                        }
+                    });
             } else {
-                window.alert("Update failed! Some fileds contain erroneous data. Please review before update.")
+                window.alert("Update failed! Some fields contain erroneous data. Please review before update.")
             }
         }
 

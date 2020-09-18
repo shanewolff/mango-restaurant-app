@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import {addProduct} from '../service/InventoryService';
+import API from '../api';
 
 const ProductAdd = (props) => {
     const [code, setCode] = useState('');
@@ -66,14 +66,24 @@ const ProductAdd = (props) => {
                     stockLevel: stockLevel,
                     supplierId: Number(supplierId)
                 };
-                addProduct(data).then(res => {
-                    window.alert("The product has been added.");
-                    resetFields();
-                    setAllValidationsNull();
-                    props.onAdd();
-                });
+                API.post('/product', data)
+                    .then(res => {
+                        window.alert("The product has been added.");
+                        resetFields();
+                        setAllValidationsNull();
+                        props.onAdd();
+                    })
+                    .catch(err => {
+                        if (err.response) {
+                            console.log('Internal Server Error');
+                            alert('Product could not be added due to an internal server error!')
+                        } else if (err.request) {
+                            console.log('Network error or server is not responding');
+                            alert('Cannot add the product data due to a network error or the service is unavailable!')
+                        }
+                    });
             } else {
-                window.alert("Submission failed! Some fileds contain erroneous data. Please review before update.")
+                window.alert("Submission failed! Some fields contain erroneous data. Please review before update.")
             }
         }
     };

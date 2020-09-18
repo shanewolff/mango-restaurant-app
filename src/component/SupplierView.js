@@ -4,16 +4,30 @@ import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import {PencilFill, PlusCircleFill, TrashFill} from 'react-bootstrap-icons';
-import {deleteSupplier} from '../service/InventoryService';
+import API from '../api';
 
 const SupplierView = (props) => {
 
     const handleDelete = id => {
         if (window.confirm("Do you want to delete the selected supplier?")) {
-            deleteSupplier(id).then(res => {
-                window.alert("The selected supplier has been deleted");
-                props.onDelete();
-            });
+            API.delete(`/supplier/${id}`)
+                .then(res => {
+                    window.alert("The selected supplier has been deleted");
+                    props.onDelete();
+                })
+                .catch(err => {
+                    if (err.response) {
+                        if (err.response.status === 500) {
+                            alert('Since the supplier is associated with products, delete operation cannot be performed. Please detatch the supplier from all the products first.')
+                        } else {
+                            console.log('Internal Server Error');
+                            alert('Could not delete the supplier. Internal Server Error');
+                        }
+                    } else if (err.request) {
+                        console.log('Network error or server is not responding');
+                        alert('Could not delete the supplier. Network error or the server is not responding');
+                    }
+                });
         }
     }
 

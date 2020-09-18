@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import {addSupplier} from '../service/InventoryService';
+import API from '../api';
 
 const SupplierAdd = (props) => {
     const [code, setCode] = useState('');
@@ -110,12 +110,22 @@ const SupplierAdd = (props) => {
                     email: email,
                     contact: contact
                 };
-                addSupplier(data).then(res => {
-                    window.alert("The supplier has been registered.");
-                    resetFields();
-                    setAllValidationsNull();
-                    props.onAdd();
-                });
+                API.post('/supplier', data)
+                    .then(res => {
+                        window.alert("The supplier has been registered.");
+                        resetFields();
+                        setAllValidationsNull();
+                        props.onAdd();
+                    })
+                    .catch(err => {
+                        if (err.response) {
+                            console.log('Internal Server Error');
+                            alert('Supplier could not be added due to an internal server error!')
+                        } else if (err.request) {
+                            console.log('Network error or server is not responding');
+                            alert('Cannot add the supplier data due to a network error or the service is unavailable!')
+                        }
+                    });
             } else {
                 window.alert("Registration failed! Some fileds contain erroneous data. Please review before update.")
             }
