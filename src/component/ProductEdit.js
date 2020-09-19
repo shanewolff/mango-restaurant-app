@@ -269,7 +269,7 @@ const ProductEdit = (props) => {
                                                   onBlur={validateQuantity}
                                                   className={getFieldValidationClass('quantity')}/>
                                     <Form.Text className="text-muted">
-                                        Qunatity is required and should be limited to 45 characters.
+                                        Quantity is required and should be limited to 45 characters.
                                     </Form.Text>
                                 </Form.Group>
                             </Col>
