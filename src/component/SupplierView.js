@@ -62,7 +62,7 @@ const SupplierView = (props) => {
             </Row>
             <Row>
                 <Col>
-                    <Table striped hover className="shadow p-3 mb-5 bg-white rounded">
+                    <Table striped hover className="shadow p-3 mb-4 bg-white rounded">
                         <thead className="thead-dark">
                         <tr>
                             <th>CODE</th>
