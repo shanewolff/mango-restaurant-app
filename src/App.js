@@ -13,19 +13,15 @@ const App = (props) => {
     const [content, setContent] = useState('inventory-home');
     const [suppliers, setSuppliers] = useState([]);
     const [products, setProducts] = useState([]);
-    const [suppliersChanged, setSuppliersChanged] = useState(false);
-    const [productsChanged, setProductsChanged] = useState(false);
     const [editingSupplier, setEditingSupplier] = useState(null);
     const [editingProduct, setEditingProduct] = useState(null);
     const [previousContentSupplierAdd, setPreviousContentSupplierAdd] = useState('inventory-home');
     const [previousContentProductAdd, setPreviousContentProductAdd] = useState('inventory-home');
     const [totalStockLevel, setTotalStockLevel] = useState(0);
 
-    // Fetch supplier data
-    useEffect(() => {
+    const fetchSupplierData = () => {
         API.get("/supplier").then(res => {
             setSuppliers(res.data);
-            setSuppliersChanged(false);
         }).catch(err => {
             if (err.response) {
                 console.log('Internal Server Error');
@@ -35,14 +31,12 @@ const App = (props) => {
                 alert('Cannot fetch supplier data due to a network error or the service is unavailable!')
             }
         });
-    }, [suppliersChanged]);
+    };
 
-    // Fetch product data
-    useEffect(() => {
+    const fetchProductData = () => {
         API.get("/product")
             .then(res => {
                 setProducts(res.data);
-                setProductsChanged(false);
             })
             .catch(err => {
                 if (err.response) {
@@ -53,10 +47,9 @@ const App = (props) => {
                     alert('Cannot fetch product data due to a network error or the service is unavailable!')
                 }
             });
-    }, [productsChanged]);
+    }
 
-    // Fetch total stock level
-    useEffect(() => {
+    const fetchTotalStockLevel = () => {
         API.get("/stock-level").then(res => {
             setTotalStockLevel(res.data.value);
         }).catch(err => {
@@ -68,7 +61,17 @@ const App = (props) => {
                 alert('Cannot fetch stock level due to a network error or the service is unavailable!')
             }
         });
-    }, [productsChanged]);
+    };
+
+    // Fetch supplier data
+    useEffect(fetchSupplierData, []);
+
+    // Fetch product data
+    useEffect(fetchProductData, []);
+
+    // Fetch total stock level
+    useEffect(fetchTotalStockLevel, []);
+
 
     const handleContentChange = content => {
         if (content === 'supplier-view') {
@@ -96,11 +99,13 @@ const App = (props) => {
     };
 
     const handleSupplierEdited = () => {
-        setSuppliersChanged(true);
+        fetchSupplierData();
+        fetchProductData();
     };
 
     const handleProductEdited = () => {
-        setProductsChanged(true);
+        fetchProductData();
+        fetchTotalStockLevel();
     };
 
     const setPreviousContentForSupplierAdd = (content) => {
