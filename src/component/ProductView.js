@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
@@ -20,6 +20,9 @@ const ProductView = (props) => {
     const [categoryIncluded, setCategoryIncluded] = useState(false);
     const [supplierIncluded, setSupplierIncluded] = useState(false);
 
+    useEffect(() => {
+        setProducts(props.products);
+    }, [props]);
 
     const handleDelete = id => {
         if (window.confirm("Do you want to delete the selected product?")) {
